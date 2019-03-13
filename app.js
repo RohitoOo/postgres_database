@@ -3,12 +3,19 @@ const path = require("path")
 const bodyParser = require("body-parser")
 const cons = require("consolidate")
 const dust = require("dustjs-helpers")
-const pg = require("pg")
+const { Client } = require("pg")
 
 const app = express()
-
+const credentials = require("./credentials")
 // DB Connect String
-const connect = `postgres://owner:Test12345!@localhost/recipebookdb`
+const connect = `postgres://owner:${
+  credentials.password
+}@localhost/recipebookdb`
+
+const client = new Client({
+  connectionString: connect
+})
+client.connect()
 
 // Assign Dust Engine To .dust files
 
@@ -30,7 +37,13 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 
 app.get("/", (req, res) => {
-  res.render("index")
+  client.query("SELECT * from recipes", (err, results) => {
+    if (err) {
+      res.send(err)
+    } else {
+      res.render("index", { recipes: results.rows })
+    }
+  })
 })
 
 const port = 3000

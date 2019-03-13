@@ -1,6 +1,19 @@
 {>"layout"/}
 
 {<body}
-THIS IS INDEX - Postgres Test
+<h1>Recipes</h1>
 
+{#recipes}
+ <br/> 
+ <div class="container" >
+ <h3>{name} </h3>
+ <br/> 
+    <h5>Ingredients:</h5>{ingredients}
+    <br/> 
+    <br/> 
+   <h5>Directions:</h5> {directions}
+ </div>
+  
+   
+{/recipes}
 {/body}
